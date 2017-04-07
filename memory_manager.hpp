@@ -14,13 +14,22 @@ namespace memory_pool
 		public:
 			MemoryManager();
 			~MemoryManager();
-			void* mem_malloc(size_t, size_t = 1);
+			void* mem_alloc(size_t, size_t = MAX_BLOCK_COUNT);
 			void mem_free(void*);
 			
 		private:
-			memory_pool::ST_MEM_CHUNK* createMemChunk(size_t, size_t = MAX_BLOCK_COUNT);
-			memory_pool::ST_MEM_LIST_NODE* createMemListNode(size_t);
+			memory_pool::ST_MEM_CHUNK* createMemChunk(size_t, size_t);
+			memory_pool::ST_MEM_LIST_NODE* createMemListNode(size_t, size_t);
+			memory_pool::ST_MEM_LIST_NODE* getListNode(void*);
+			memory_pool::ST_MEM_LIST_NODE* getListNode(size_t);
+			memory_pool::ST_MEM_CHUNK* getChunkByIndex(memory_pool::ST_MEM_LIST_NODE*, int index);
 			size_t getBlockSize(size_t);
+			memory_pool::ST_MEM_LIST_NODE* indexFromAddress(long*, char*);
+			char* addressFromIndex(void* blockBaseAddress, long index, size_t blockSize);
+			void poolRelease(void);
+			void listRelease(memory_pool::ST_MEM_LIST_NODE*);
+			void chunkRelease(memory_pool::ST_MEM_CHUNK*);
+			int getFreeSlotIndex(memory_pool::ST_MEM_LIST_NODE*, int*);
 	};
 };
 
